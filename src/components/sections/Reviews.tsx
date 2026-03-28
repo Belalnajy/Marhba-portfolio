@@ -4,6 +4,7 @@ import { useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import Image from "next/image";
+import { Star } from "lucide-react";
 
 const reviewImages = [
   "/images/reviews/Screenshot 2026-03-21 080026.png",
@@ -37,7 +38,8 @@ export default function Reviews() {
             </p>
           </div>
           <div className="flex-shrink-0 flex items-center gap-2 bg-[var(--color-brand-surface)] glass px-4 py-2 rounded-full border border-white/10">
-            <span className="text-[var(--color-brand-emerald)] font-bold">★ 5.0</span>
+            <Star className="text-[var(--color-brand-emerald)] w-4 h-4 fill-[var(--color-brand-emerald)]" />
+            <span className="text-[var(--color-brand-emerald)] font-bold">5.0</span>
             <span className="text-sm font-mono text-gray-400">Khamsat Profile Rating</span>
           </div>
         </motion.div>
