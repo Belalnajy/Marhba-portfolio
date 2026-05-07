@@ -33,15 +33,19 @@ export default function Certifications() {
   const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1 });
   const scrollRef = useRef<HTMLDivElement>(null);
   const [selectedCert, setSelectedCert] = useState<typeof certificates[0] | null>(null);
+  const isDragging = useRef(false);
+  const startX = useRef(0);
+  const scrollLeft = useRef(0);
+  const userInteracting = useRef(false);
+  const resumeTimeout = useRef<NodeJS.Timeout | null>(null);
 
   // Auto-scroll animation logic
   useEffect(() => {
     let animationFrameId: number;
     const container = scrollRef.current;
     
-    // Slow manual endless scroll
     const scroll = () => {
-      if (container && !selectedCert) {
+      if (container && !selectedCert && !userInteracting.current) {
         container.scrollLeft += 0.5;
         if (container.scrollLeft >= container.scrollWidth - container.clientWidth) {
           container.scrollLeft = 0;
@@ -52,20 +56,50 @@ export default function Certifications() {
 
     animationFrameId = requestAnimationFrame(scroll);
 
-    // Pause on hover
-    if (container) {
-      container.addEventListener("mouseenter", () => cancelAnimationFrame(animationFrameId));
-      container.addEventListener("mouseleave", () => {
-        if (!selectedCert) {
-          animationFrameId = requestAnimationFrame(scroll);
-        }
-      });
-    }
-
     return () => {
       cancelAnimationFrame(animationFrameId);
+      if (resumeTimeout.current) clearTimeout(resumeTimeout.current);
     };
   }, [selectedCert]);
+
+  const pauseAutoScroll = () => {
+    userInteracting.current = true;
+    if (resumeTimeout.current) clearTimeout(resumeTimeout.current);
+  };
+
+  const resumeAutoScroll = () => {
+    if (resumeTimeout.current) clearTimeout(resumeTimeout.current);
+    resumeTimeout.current = setTimeout(() => {
+      userInteracting.current = false;
+    }, 3000);
+  };
+
+  const handlePointerDown = (e: React.PointerEvent) => {
+    const container = scrollRef.current;
+    if (!container) return;
+    isDragging.current = true;
+    startX.current = e.clientX - container.offsetLeft;
+    scrollLeft.current = container.scrollLeft;
+    container.style.cursor = 'grabbing';
+    pauseAutoScroll();
+  };
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (!isDragging.current) return;
+    const container = scrollRef.current;
+    if (!container) return;
+    e.preventDefault();
+    const x = e.clientX - container.offsetLeft;
+    const walk = (x - startX.current) * 1.5;
+    container.scrollLeft = scrollLeft.current - walk;
+  };
+
+  const handlePointerUp = () => {
+    isDragging.current = false;
+    const container = scrollRef.current;
+    if (container) container.style.cursor = 'grab';
+    resumeAutoScroll();
+  };
 
   return (
     <section id="certifications" className="py-24 bg-[var(--color-brand-surface)] relative overflow-hidden" ref={ref}>
@@ -90,8 +124,12 @@ export default function Certifications() {
         animate={inView ? { opacity: 1 } : {}}
         transition={{ duration: 1, delay: 0.3 }}
         ref={scrollRef} 
-        className="flex gap-8 overflow-x-auto pb-12 pt-4 px-6 md:px-24 snap-x snap-mandatory hide-scrollbar whitespace-nowrap"
-        style={{ scrollBehavior: 'smooth' }}
+        className="flex gap-8 overflow-x-auto pb-12 pt-4 px-6 md:px-24 snap-x snap-mandatory hide-scrollbar whitespace-nowrap select-none"
+        style={{ scrollBehavior: isDragging.current ? 'auto' : 'smooth', cursor: 'grab' }}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerLeave={handlePointerUp}
       >
         {certificates.map((cert, idx) => (
           <motion.div 

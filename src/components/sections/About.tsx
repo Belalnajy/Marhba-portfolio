@@ -13,8 +13,8 @@ interface StatItemProps {
 }
 
 const stats: StatItemProps[] = [
-  { end: 500, suffix: "+", label: "Defects Documented", color: "text-[var(--color-brand-emerald)]" },
-  { end: 15, suffix: "+", label: "Projects Tested", color: "text-[var(--color-brand-blue)]" },
+  { end: 1000, suffix: "+", label: "Defects Documented", color: "text-[var(--color-brand-emerald)]" },
+  { end: 25, suffix: "+", label: "Projects Tested", color: "text-[var(--color-brand-blue)]" },
   { end: 2, suffix: "", label: "ISTQB Certifications", color: "text-[var(--color-brand-gold)]" },
   { end: 2, suffix: "+", label: "Years Experience", color: "text-[var(--color-brand-coral)]" },
 ];
@@ -90,12 +90,13 @@ export default function About() {
             {/* Stats Grid */}
             <div className="grid grid-cols-2 gap-6">
               {stats.map((stat, idx) => (
-                <div key={idx} className="glass p-6 rounded-2xl relative overflow-hidden group">
+                <div key={idx} className="glass p-6 rounded-2xl relative overflow-hidden group cursor-default transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:border-white/20">
                   <div className={`absolute top-0 left-0 w-1 h-full opacity-50 transition-all duration-300 group-hover:w-full group-hover:opacity-10 ${stat.color.replace('text', 'bg')}`}></div>
-                  <h4 className={`text-4xl md:text-5xl font-display font-bold mb-2 ${stat.color}`}>
+                  <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none ${stat.color.replace('text', 'bg').replace(']', '/10]')}`}></div>
+                  <h4 className={`text-4xl md:text-5xl font-display font-bold mb-2 relative z-10 ${stat.color}`}>
                     {inView ? <CountUp end={stat.end} duration={2.5} suffix={stat.suffix} /> : "0" + (stat.suffix || "")}
                   </h4>
-                  <p className="text-sm text-gray-400 font-medium uppercase tracking-wider">{stat.label}</p>
+                  <p className="text-sm text-gray-400 font-medium uppercase tracking-wider relative z-10 group-hover:text-gray-300 transition-colors">{stat.label}</p>
                 </div>
               ))}
             </div>

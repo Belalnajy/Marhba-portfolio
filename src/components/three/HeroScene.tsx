@@ -32,7 +32,7 @@ function ParticleField() {
   const { mouse } = useThree();
 
   // Create particles only once
-  const positions = useMemo(() => generateParticles(800, 15), []);
+  const positions = useMemo(() => generateParticles(1200, 15), []);
 
   useFrame((state, delta) => {
     if (!ref.current) return;
@@ -52,7 +52,7 @@ function ParticleField() {
         <PointMaterial
           transparent
           color="#06d6a0" // Emerald accent
-          size={0.05}
+          size={0.08}
           sizeAttenuation={true}
           depthWrite={false}
           blending={THREE.AdditiveBlending}
