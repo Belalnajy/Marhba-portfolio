@@ -141,22 +141,14 @@ export default function Projects() {
                 }}>
                 {/* 3D Tilt Card Container */}
                 <div className="w-full h-full relative transition-transform duration-500 transform-style-3d group-hover:rotate-y-12 group-hover:rotate-x-12">
-                  {project.noImage ? (
-                    <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-brand-surface)] to-black/60 flex items-center justify-center border-b border-white/10 h-1/2">
-                      <h4 className="text-3xl font-display font-black text-white/20 uppercase tracking-widest">
-                        {project.category.split('/')[0]}
-                      </h4>
-                    </div>
-                  ) : (
-                    <div className="relative w-full h-1/2 bg-black/30">
-                      <Image
-                        src={project.image!}
-                        alt={project.title}
-                        fill
-                        className="object-cover object-[100%_40%] border-b border-white/10 grayscale-[50%] group-hover:grayscale-0 transition-all duration-500"
-                      />
-                    </div>
-                  )}
+                  <div className="relative w-full h-1/2 bg-black/30">
+                    <Image
+                      src={project.image}
+                      alt={project.title}
+                      fill
+                      className="object-cover object-[100%_40%] border-b border-white/10 grayscale-[50%] group-hover:grayscale-0 transition-all duration-500"
+                    />
+                  </div>
 
                   {/* Content below image */}
                   <div className="absolute top-1/2 bottom-0 left-0 right-0 p-6 flex flex-col justify-start">
