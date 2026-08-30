@@ -32,7 +32,7 @@ const experiences = [
     company: 'Medicta',
     type: 'Healthcare Tech',
     role: 'Software QC Engineer',
-    period: 'Oct 2025 – Present',
+    period: 'Oct 2024 – Jun 2025',
     location: 'Remote',
     color: '#118ab2',
     summary:
@@ -51,7 +51,7 @@ const experiences = [
     company: 'Freelance QA',
     type: 'Independent Consultant',
     role: 'Software Tester',
-    period: 'Jun 2024 – Aug 2025',
+    period: 'Jun 2023 – Present',
     location: 'Remote',
     color: '#ef476f',
     summary:
